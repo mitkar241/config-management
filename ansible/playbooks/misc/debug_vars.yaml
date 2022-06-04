@@ -1,0 +1,23 @@
+# command :
+# ansible-playbook playbooks/debug_vars.yaml -i inventories/dev/hosts -vv
+---
+- hosts: grp_fullstack
+  tasks:
+    # https://docs.ansible.com/ansible/latest/user_guide/playbooks_vars_facts.html
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+    - name: 'Printing Host Name'
+      debug:
+        msg: "{{ ansible_facts['nodename'] }}"
+    # debugging group_vars
+    - name: 'Printing Purpose'
+      debug:
+        msg: "{{ purpose }}"
+    - name: 'Printing groupTag'
+      debug:
+        msg: "{{ groupTag }}"
+    # debugging host_vars
+    - name: 'Printing Priority'
+      debug:
+        msg: "{{ priority }}"

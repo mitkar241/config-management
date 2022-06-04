@@ -1,0 +1,34 @@
+# command :
+# ansible-playbook playbooks/apache_install.yaml -i inventories/dev/hosts --ask-become-pass -vv
+---
+- hosts: grp_fullstack
+  become: true
+  become_method: sudo
+
+  tasks:
+    - name: "Update packages and upgrade"
+      apt:
+        update_cache: true
+        upgrade: dist
+        force_apt_get: true
+    - name: "Install Apache server"
+      apt:
+        name: apache2
+        state: latest
+    - name: "Create document root"
+      file:
+        path: "/var/www/html"
+        state: directory
+        owner: "www-data"
+        mode: 0755
+    - name: "Enable Apache on Firewall"
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+  # The handler will run if any of these task get a changed status.
+  #handlers:
+    - name: "restart apache2 service"
+      service:
+        name: apache2
+        state: restarted

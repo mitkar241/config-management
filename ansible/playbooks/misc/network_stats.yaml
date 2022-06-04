@@ -1,0 +1,11 @@
+# command :
+# ansible-playbook playbooks/network_stats.yaml -i inventories/dev/hosts -vv
+---
+- hosts: grp_fullstack
+  tasks:
+    - name: "Show Network Interfaces"
+      command: ifconfig
+      register: details
+    - name: 'Get Interfaces details'
+      debug:
+        msg: "{{ details.stdout }}"
